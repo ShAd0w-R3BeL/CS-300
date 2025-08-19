@@ -1,4 +1,5 @@
 CS 300: Data Structures and Algorithms Portfolio
+
 Welcome to my portfolio for CS 300: Data Structures and Algorithms at Southern New Hampshire University. This repository showcases my work from the course, demonstrating my understanding of fundamental data structures, algorithmic design principles, and problem-solving techniques.
 
 Course Projects
