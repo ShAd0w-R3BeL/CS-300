@@ -1,0 +1,37 @@
+Project One
+CS-300 - SNHU
+Matthew Wood
+________________________________________
+Big O Analysis
+Operation	Vector	      Hash     Table	    Tree (Balanced)
+Loading Data	          O(n)	   O(n)	      O(nlogn)
+Printing Sorted List	  O(nlogn) O(nlogn)	  O(n)
+Finding a Single Course	O(n)	   O(1)	      O(logn)
+________________________________________
+Explanation of Runtimes
+•	Loading Data:
+o	Vector and Hash Table: Both offer an average-case O(1) insertion. Performing this for n courses results in an overall linear runtime of O(n).
+o	Tree: Inserting each of the n courses into a balanced binary search tree requires traversing the tree to find the correct spot, which takes O(logn) time per insertion. This leads to a total loading time of O(nlogn).
+•	Printing Sorted List:
+o	Vector and Hash Table: Neither data structure maintains sorted order. To print the list in alphanumeric order, the data must first be sorted, which is a process with a worst-case runtime of O(nlogn).
+o	Tree: A binary search tree is naturally ordered. An in-order traversal visits every node exactly once and does so in sorted order, making the operation highly efficient at O(n).
+•	Finding a Single Course:
+o	Vector: A linear search is required, which in the worst case must check every course, resulting in an O(n) runtime.
+o	Hash Table: By using a hash function, the location of a course can be found in average constant time, O(1).
+o	Tree: Searching in a balanced tree is done by eliminating half of the nodes at each level, similar to a binary search. The time complexity is proportional to the height of the tree, which is O(logn).
+________________________________________
+Evaluation and Recommendation
+Evaluation of Data Structures
+•	Vector:
+o	Advantages: Simple to implement and has a fast loading time of O(n).
+o	Disadvantages: Inefficient for both key project requirements: searching for a course (O(n)) and printing a sorted list (O(nlogn)).
+•	Hash Table:
+o	Advantages: Extremely fast for single-course lookups (O(1) on average), making it the most efficient option for this task. It also has a fast loading time of O(n).
+o	Disadvantages: It does not preserve order, requiring an expensive O(nlogn) sorting step to print an alphanumeric course list.
+•	Binary Search Tree:
+o	Advantages: Efficiently handles both of the project's main requirements. Searching is fast (O(logn)), and printing a sorted list is the most efficient of the three (O(n)). This makes it a great choice for applications where both operations are common.
+o	Disadvantages: The loading process is slower than the other two structures (O(nlogn)), and the implementation is more complex.
+Recommendation
+I recommend using a binary search tree for this project.
+The justification is based on its balanced performance across all requirements. While the hash table offers a faster search time, the tree's ability to provide a sorted list in linear time (O(n)) is a significant advantage. Given that the project requires both efficient course lookup and the ability to print an ordered list, the binary search tree provides the optimal balance. Its O(logn) search time is more than sufficient, and its superior performance for the sorted print function makes it the best overall choice.
+
