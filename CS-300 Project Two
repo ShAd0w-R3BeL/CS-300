@@ -1,0 +1,267 @@
+//============================================================================
+// Name        : ProjectTwo.cpp
+// Author      : Matthew Wood
+// Version     : 1.0
+// Copyright   : © 2025 Matthew Wood. All rights reserved.
+// Description : Final Project for CS-300
+//               Course Planner Application using a Binary Search Tree
+//============================================================================
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+
+// Define a struct to hold course information
+struct Course {
+    std::string courseNumber;
+    std::string title;
+    std::vector<std::string> prerequisites;
+};
+
+// Define the Node struct for the binary search tree
+struct Node {
+    Course course;
+    Node* left;
+    Node* right;
+
+    // Default constructor
+    Node() : left(nullptr), right(nullptr) {}
+
+    // Parameterized constructor
+    Node(const Course& aCourse) : course(aCourse), left(nullptr), right(nullptr) {}
+};
+
+// A simple Binary Search Tree class to manage the course nodes
+class BinarySearchTree {
+private:
+    Node* root;
+
+    // Recursive helper function to add a new node
+    void addNode(Node* node, const Course& aCourse) {
+        if (node->course.courseNumber > aCourse.courseNumber) {
+            // If the new course number is smaller, go to the left subtree
+            if (node->left == nullptr) {
+                node->left = new Node(aCourse);
+            }
+            else {
+                addNode(node->left, aCourse);
+            }
+        }
+        else {
+            // Otherwise, go to the right subtree
+            if (node->right == nullptr) {
+                node->right = new Node(aCourse);
+            }
+            else {
+                addNode(node->right, aCourse);
+            }
+        }
+    }
+
+    // Recursive helper function for in-order traversal to print nodes
+    void inOrderTraversal(Node* node) {
+        if (node != nullptr) {
+            // Traverse left subtree
+            inOrderTraversal(node->left);
+            // Print the current node's course info
+            std::cout << "  " << node->course.courseNumber << ", " << node->course.title << std::endl;
+            // Traverse right subtree
+            inOrderTraversal(node->right);
+        }
+    }
+
+    // Recursive helper function to search for a course
+    Node* search(Node* node, const std::string& courseNumber) const {
+        // Base case: tree is empty or we found the course
+        if (node == nullptr || node->course.courseNumber == courseNumber) {
+            return node;
+        }
+
+        // Search down the left side of the tree
+        if (node->course.courseNumber > courseNumber) {
+            return search(node->left, courseNumber);
+        }
+        // Search down the right side of the tree
+        else {
+            return search(node->right, courseNumber);
+        }
+    }
+
+    // Helper function to destroy the tree and free memory
+    void destroyTree(Node* node) {
+        if (node != nullptr) {
+            destroyTree(node->left);
+            destroyTree(node->right);
+            delete node;
+        }
+    }
+
+public:
+    // Default constructor
+    BinarySearchTree() {
+        root = nullptr;
+    }
+
+    // Destructor to free memory
+    ~BinarySearchTree() {
+        destroyTree(root);
+    }
+
+    // Public method to add a course
+    void addCourse(const Course& aCourse) {
+        if (root == nullptr) {
+            root = new Node(aCourse);
+        }
+        else {
+            addNode(root, aCourse);
+        }
+    }
+
+    // Public method to print the sorted list of courses
+    void printAllCourses() {
+        inOrderTraversal(root);
+    }
+
+    // Public method to search for a course and return a pointer to it
+    Node* findCourse(const std::string& courseNumber) const {
+        // Create an uppercase version of the search term
+        std::string upperCaseCourseNumber = courseNumber;
+        std::transform(upperCaseCourseNumber.begin(), upperCaseCourseNumber.end(), upperCaseCourseNumber.begin(), ::toupper);
+        return search(root, upperCaseCourseNumber);
+    }
+};
+
+// Function to load course data from a stream into the BST
+// This function can accept either a file stream or a string stream
+void loadData(BinarySearchTree& tree, std::istream& dataStream) {
+    std::string line;
+    while (std::getline(dataStream, line)) {
+        if (line.empty()) {
+            continue;
+        }
+
+        std::stringstream ss(line);
+        std::string part;
+        Course course;
+
+        // Read course number and convert to uppercase
+        if (std::getline(ss, part, ',')) {
+            std::transform(part.begin(), part.end(), part.begin(), ::toupper);
+            course.courseNumber = part;
+        }
+
+        // Read course title
+        if (std::getline(ss, part, ',')) {
+            course.title = part;
+        }
+
+        // Read prerequisites
+        while (std::getline(ss, part, ',')) {
+            // Convert prerequisites to uppercase as well for consistency
+            std::transform(part.begin(), part.end(), part.begin(), ::toupper);
+            course.prerequisites.push_back(part);
+        }
+
+        // Add the course to the tree only if it has a course number
+        if (!course.courseNumber.empty()) {
+            tree.addCourse(course);
+        }
+    }
+    std::cout << "Data loaded successfully." << std::endl;
+}
+
+// Function to print an alphanumeric list of courses
+void printCourseList(BinarySearchTree& tree) {
+    std::cout << "Here is a sample schedule:" << std::endl;
+    tree.printAllCourses();
+}
+
+// Function to print information for a specific course
+void printCourseInfo(const BinarySearchTree& tree) {
+    std::string courseNumber;
+    std::cout << "What course do you want to know about? ";
+    std::cin >> courseNumber;
+
+    Node* foundNode = tree.findCourse(courseNumber);
+
+    if (foundNode != nullptr) {
+        std::cout << "  " << foundNode->course.courseNumber << ", " << foundNode->course.title << std::endl;
+        if (!foundNode->course.prerequisites.empty()) {
+            std::cout << "  Prerequisites: ";
+            for (size_t i = 0; i < foundNode->course.prerequisites.size(); ++i) {
+                std::cout << foundNode->course.prerequisites[i];
+                if (i < foundNode->course.prerequisites.size() - 1) {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << std::endl;
+        }
+        else {
+            std::cout << "  Prerequisites: None" << std::endl;
+        }
+    }
+    else {
+        std::cout << "Course with number " << courseNumber << " not found." << std::endl;
+    }
+}
+
+// Main function
+int main() {
+    BinarySearchTree courseTree;
+    int choice = 0;
+
+    // Hardcoded course data from your input
+    std::stringstream courseData;
+    courseData << "MATH201,Discrete Mathematics,,\n";
+    courseData << "CSCI300,Introduction to Algorithms,CSCI200,MATH201\n";
+    courseData << "CSCI350,Operating Systems,CSCI300,\n";
+    courseData << "CSCI101,Introduction to Programming in C++,CSCI100,\n";
+    courseData << "CSCI100,Introduction to Computer Science,,\n";
+    courseData << "CSCI301,Advanced Programming in C++,CSCI101,\n";
+    courseData << "CSCI400,Large Software Development,CSCI301,CSCI350\n";
+    courseData << "CSCI200,Data Structures,CSCI101,\n";
+
+    // Load data from the stringstream
+    loadData(courseTree, courseData);
+
+    std::cout << "Welcome to the course planner." << std::endl;
+
+    do {
+        std::cout << "\nMenu Options:" << std::endl;
+        std::cout << "1. Load Data Structure" << std::endl;
+        std::cout << "2. Print Course List" << std::endl;
+        std::cout << "3. Print Course Information" << std::endl;
+        std::cout << "9. Exit" << std::endl;
+        std::cout << "What would you like to do? ";
+
+        if (!(std::cin >> choice)) {
+            std::cout << "Invalid input. Please enter a number." << std::endl;
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(10000, '\n'); // Discard bad input
+            continue;
+        }
+
+        switch (choice) {
+        case 1:
+            std::cout << "Data has already been loaded from the hardcoded list." << std::endl;
+            break;
+        case 2:
+            printCourseList(courseTree);
+            break;
+        case 3:
+            printCourseInfo(courseTree);
+            break;
+        case 9:
+            std::cout << "Thank you for using the course planner!" << std::endl;
+            break;
+        default:
+            std::cout << choice << " is not a valid option." << std::endl;
+            break;
+        }
+    } while (choice != 9);
+
+    return 0;
+}
