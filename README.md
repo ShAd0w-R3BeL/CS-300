@@ -1,5 +1,4 @@
 CS 300: Data Structures and Algorithms Portfolio
-
 Welcome to my portfolio for CS 300: Data Structures and Algorithms at Southern New Hampshire University. This repository showcases my work from the course, demonstrating my understanding of fundamental data structures, algorithmic design principles, and problem-solving techniques.
 
 Course Projects
@@ -14,6 +13,22 @@ Project Two: Course Planner Application
 Description: This project involved developing a Course Planner application in C++. The program utilizes a Binary Search Tree to efficiently store, organize, and retrieve course information. It can load course data from a file (or in this case, a hardcoded list), print a complete list of courses in sorted alphanumeric order, and display detailed information for a specific course, including its prerequisites.
 
 Key Concepts: Binary Search Tree Implementation, In-Order Traversal, File I/O, and Problem-Solving.
+
+Reflection on Course Projects
+What was the problem you were solving in the projects for this course?
+The main problem was to design and implement a course planner application that could efficiently store, retrieve, and organize a list of courses. This involved choosing the right data structures to handle key operations like loading data from a file, searching for a specific course, and printing all courses in a sorted, alphanumeric order.
+
+How did you approach the problem? Consider why data structures are important to understand.
+I started by breaking down the problem into its core requirements: loading, searching, and sorting. For Project One, I analyzed three different data structures (Vector, Hash Table, and Binary Search Tree) to determine their efficiency for each of these operations using Big O notation. This analysis was crucial because it allowed me to make an informed, data-driven decision on which structure was best suited for the application's needs. Understanding data structures is vital because the choice of structure directly impacts a program's performance and scalability. A well-chosen data structure can make the difference between an application that runs in seconds and one that takes hours to process the same data.
+
+How did you overcome any roadblocks you encountered while going through the activities or project?
+My main roadblock was implementing the Binary Search Tree, particularly the recursive functions for insertion and traversal. I overcame this by breaking down the recursive logic into smaller, more manageable steps. I also relied on external resources and tutorials to visualize the tree's behavior and dry-run the recursive calls on paper. This methodical approach helped demystify the recursion and allowed me to debug my code more effectively.
+
+How has your work on this project expanded your approach to designing software and developing programs?
+This project has fundamentally changed my approach to software design. Before this course, my primary focus was on "making the code work." Now, I think critically about the underlying data structures and algorithms before I even begin coding. I now see that a well-designed solution begins with selecting the most efficient tools for the job, which often involves a trade-off analysis between different data structures. This has shifted my mindset from a tactical "how to code this" to a strategic "what is the best way to solve this problem."
+
+How has your work on this project evolved the way you write programs that are maintainable, readable, and adaptable?
+My work on this project has significantly improved the way I write code. By designing my solution around a specific data structure (the Binary Search Tree), I was able to create a more modular and organized program. The use of classes and clear function names for operations like addCourse, findCourse, and printAllCourses makes the code more readable and easier for others to understand. This also makes the program more adaptable; if a new feature were needed, like deleting a course, I would know exactly where to add the new method within the BinarySearchTree class without disrupting the existing logic.
 
 Key Concepts & Skills
 Throughout this course, I have developed a strong foundation in the following areas, as demonstrated by the projects in this repository:
